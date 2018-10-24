@@ -12,6 +12,5 @@ pipelines:
         caches:
           - maven
         script: 
-          - cp maven-conf/settings.xml /maven-conf/settings.xml
           - mvn clean package
-          - mvn sonar:sonar
+          - -mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=faizalyusuf-bitbucket -Dsonar.login=$SONAR_TOKEN
