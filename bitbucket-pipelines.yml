@@ -13,4 +13,4 @@ pipelines:
           - maven
         script: 
           - mvn clean package
-          - -mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=faizalyusuf-bitbucket -Dsonar.login=$SONAR_TOKEN
+          - mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=faizalyusuf-bitbucket -Dsonar.login=$SONAR_TOKEN
