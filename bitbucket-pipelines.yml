@@ -8,14 +8,9 @@ image: maven:3.5
 pipelines:
   default:
     - step:
-        name: Build
+        name: Build & Scan
         caches:
           - maven
         script: 
           - mvn clean package
-    - step:
-        name: Code Analysis
-        caches:
-          - maven
-        script:
           - mvn sonar:sonar
