@@ -8,13 +8,14 @@ image: maven:3.5
 pipelines:
   default:
     - step:
-        #services:
-        #  - docker
+        name: Build
         caches:
           - maven
         script: 
           - mvn clean package
-          # authenticate with the Docker Hub registry
-          #- docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
-          # push the new Docker image to the Docker registry
-          #- docker push $IMAGE_NAME
+    - step:
+        name: Code Analysis
+        caches:
+          - maven
+        script:
+          - mvn sonar:sonar
