@@ -12,6 +12,6 @@ pipelines:
         caches:
           - maven
         script: 
-          - cp -r maven-conf/settings.xml /maven-conf/settings.xml
+          - cp maven-conf/settings.xml /maven-conf/settings.xml
           - mvn clean package
           - mvn sonar:sonar
