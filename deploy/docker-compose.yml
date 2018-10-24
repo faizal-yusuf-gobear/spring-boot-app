@@ -1,0 +1,50 @@
+version: '3.1'
+services:
+#  database:
+#    image: postgres:10-alpine
+#    environment:
+#      POSTGRES_USER_FILE: /run/secrets/db_user
+#      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+#      POSTGRES_DB_FILE: /run/secrets/db_database
+#    ports:
+#      - 5432:5432
+#    networks: 
+#      - webapp-net
+#    secrets:
+#      - db_password
+#      - db_user
+#      - db_database
+#    deploy:
+#      placement:
+#        constraints:
+#          - node.hostname == swarmnode
+#  adminer: 
+#    image: adminer:latest 
+#    ports: 
+#      - 8086:8080
+#    networks: 
+#      - webapp-net
+#    deploy:
+#      placement:
+#        constraints:
+#          - node.hostname == swarmnode
+  webapp:
+    image: dtr.local/demo/webapp:${VERSION}
+    ports:
+      - 8090:8090
+    networks: 
+      - webapp-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == swarmnode
+networks:
+  webapp-net:
+#secrets:
+#  db_user:
+#    external: true
+#  db_password:
+#    external: true
+#  db_database:
+#    external: true

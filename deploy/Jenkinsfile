@@ -1,0 +1,41 @@
+//@Library('jenkins-library') _
+
+pipeline {
+    
+	agent {label 'jenkinsagent'}
+
+    stages {
+        stage('Deploy App') {
+      	  steps {
+            sh "docker stack rm webapp"
+      	   	dir('deploy') {
+              script {
+                withCredentials([usernamePassword(credentialsId: 'db_login', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    try {  
+                          sh "docker secret rm db_user"
+                          sh "docker secret rm db_password"
+                    }catch (err) {
+                          sh "echo no blog secret"
+                     }
+                    sh "echo ${USERNAME} | docker secret create db_user -"
+                    sh "echo ${PASSWORD} | docker secret create db_password -"
+                      
+                    if(env.TYPE=='Swarm') {
+                          sh "docker stack deploy -c docker-compose.yml webapp"
+                    }
+                    else {
+                          sh "./kubectl-deploy.sh"
+  	                }
+                }//end withCredentials
+              }//end script
+      	    }//end dir
+          }//end steps
+        }//end stage
+    }//end stages
+    post {
+      always {
+        cleanWs() 
+        //slackNotifier(currentBuild.currentResult)
+      }
+    } 
+}
