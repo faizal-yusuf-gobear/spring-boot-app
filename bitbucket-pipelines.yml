@@ -8,8 +8,10 @@ image: maven:3.5
 pipelines:
   default:
     - step:
-        services:
-          - docker
+        #services:
+        #  - docker
+        caches:
+          - maven
         script: 
           - mvn clean package
           # authenticate with the Docker Hub registry
