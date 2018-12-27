@@ -2,7 +2,7 @@
 
 pipeline{
 
-  agent {label 'jenkinsagent'}
+  agent {label 'macagent'}
     
   stages {
     stage('Build App'){
