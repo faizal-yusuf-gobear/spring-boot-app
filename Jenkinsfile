@@ -16,12 +16,12 @@ pipeline{
         }
       }
     }//end build app
-    stage('Code Analysis'){
+    /*stage('Code Analysis'){
       steps {
         sh "echo run sonarqube scan"
         sh "docker run --rm -v ${workspace}:/usr/src/mymaven -v ${workspace}/maven-conf:/usr/share/maven/ref/ -v m2maven:/root/.m2:rw -w /usr/src/mymaven maven:3.5-alpine mvn sonar:sonar"
       }
-    }
+    }*/
     stage('Build & Tag Image') {
       steps {
         script {
@@ -35,7 +35,7 @@ pipeline{
         }
       }
     }
-    stage('Push to Repository') { 
+    /*stage('Push to Repository') { 
       steps {
         script {
           def pom = readMavenPom file: 'pom.xml'
@@ -62,13 +62,13 @@ pipeline{
                       def buildInfo = server.upload(uploadSpec)
                       server.publishBuildInfo(buildInfo)
                 */
-                }
-              }
-            )
-          }//end script
-        }//end steps
-    }//end push
-    stage('Deploy App') {
+         //       }
+        //      }
+       //     )
+      //    }//end script
+     //   }//end steps
+    //}//end push
+    /*stage('Deploy App') {
       steps {
         script {
           def pom = readMavenPom file: 'pom.xml' 
@@ -79,7 +79,7 @@ pipeline{
           }
         }
       }
-    }
+    }*/
   }//end stages  
   post {
     always {
