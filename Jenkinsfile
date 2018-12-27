@@ -29,8 +29,8 @@ pipeline{
             sh "cp ${workspace}/target/*.jar ${workspace}/deploy" 
             dir('deploy') {                 
                   //sh "docker build --rm -t demo/webapp --build-arg name=${NAME} --build-arg version=${VERSION} ."
-                  sh "docker build --rm -t demo/webapp --build-arg name=${pom.version} --build-arg version=${pom.version} ."
-                  sh "docker tag demo/webapp dtr.local/demo/webapp:${pom.version}"
+                  sh "docker build --rm -t faizalyusuf/webapp --build-arg name=${pom.version} --build-arg version=${pom.version} ."
+                  //sh "docker tag demo/webapp dtr.local/demo/webapp:${pom.version}"
        	    }
         }
       }
@@ -44,7 +44,7 @@ pipeline{
                   dir('deploy') {
                       //withDockerRegistry(url: 'https://dtr.local', credentialsId: 'dtr-credentials') {}
                       sh "docker login -u $DOCKER_USER -p $DOCKER_PASS"
-                      sh "docker push dtr.local/demo/webapp:${pom.version}"
+                      sh "docker push faizalyusuf/webapp:${pom.version}"
                   }
               //},
               //Artifactory: {  
