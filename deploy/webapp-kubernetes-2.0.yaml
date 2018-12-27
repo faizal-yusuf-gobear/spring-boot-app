@@ -1,14 +1,18 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: webapp
 spec:
-  replicas: 2
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp
+  minReadySeconds: 50
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 2
-      maxUnavailable: 0
+      maxUnavailable: 1
   template:
     metadata:
       labels:
@@ -16,7 +20,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: 'dtr.local/demo/webapp:2.0'
+        image: 'faizalyusuf/webapp:2.0'
         imagePullPolicy: "Always"
         ports:
         - containerPort: 8090     
@@ -32,7 +36,7 @@ spec:
   ports:
     #- protocol: TCP
     - port: 8090
-      nodePort: 35000
+      nodePort: 31000
 #---
 #apiVersion: extensions/v1beta1
 #kind: Ingress
