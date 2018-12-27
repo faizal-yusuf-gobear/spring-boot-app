@@ -35,20 +35,21 @@ pipeline{
         }
       }
     }
-    /*stage('Push to Repository') { 
+    stage('Push to Repository') { 
       steps {
         script {
           def pom = readMavenPom file: 'pom.xml'
-            parallel (
-              DTR: {
+            //parallel (
+              //DTR: {
                   dir('deploy') {
                       //withDockerRegistry(url: 'https://dtr.local', credentialsId: 'dtr-credentials') {}
+                      sh "docker login -u $DOCKER_USER -p $DOCKER_PASS"
                       sh "docker push dtr.local/demo/webapp:${pom.version}"
                   }
-              },
-              Artifactory: {  
-                script {
-                  sh "echo push binary to artifactory"
+              //},
+              //Artifactory: {  
+                //script {
+                  //sh "echo push binary to artifactory"
                   /*def server = Artifactory.server('artifactory')
                   def uploadSpec = """{
                       "files":[
@@ -65,9 +66,9 @@ pipeline{
          //       }
         //      }
        //     )
-      //    }//end script
-     //   }//end steps
-    //}//end push
+          }//end script
+        }//end steps
+    }//end push
     /*stage('Deploy App') {
       steps {
         script {
