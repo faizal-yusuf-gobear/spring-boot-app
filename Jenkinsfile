@@ -72,10 +72,11 @@ pipeline{
       steps {
         script {
           def pom = readMavenPom file: 'pom.xml' 
-          //dir('deploy') {
-              //sh "sh kubectl-deploy.sh"
-              sh "VERSION=${pom.version} docker stack deploy -c docker-compose.yml webapp"
-          //}
+          dir('deploy') {
+              //sh "echo app deployed"
+              sh "sh kubectl-deploy.sh ${pom.version}"
+              //sh "VERSION=${pom.version} docker stack deploy -c docker-compose.yml webapp"
+          }
         }
       }
     }
