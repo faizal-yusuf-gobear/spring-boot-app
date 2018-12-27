@@ -42,8 +42,8 @@ pipeline{
             //parallel (
               //DTR: {
                   dir('deploy') {
-                      //withDockerRegistry(url: 'https://dtr.local', credentialsId: 'dtr-credentials') {}
-                      sh "docker login -u $DOCKER_USER -p $DOCKER_PASS"
+                      withDockerRegistry(url: 'https://docker.io', credentialsId: 'dockercloud') {}
+                      //sh "docker login -u $DOCKER_USER -p $DOCKER_PASS"
                       sh "docker push faizalyusuf/webapp:${pom.version}"
                   }
               //},
