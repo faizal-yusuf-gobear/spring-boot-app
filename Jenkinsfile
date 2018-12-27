@@ -2,7 +2,7 @@
 
 pipeline{
 
-  agent {label 'jenkinsagent'}
+  agent {label 'macagent'}
     
   stages {
     stage('Build App'){
@@ -16,12 +16,12 @@ pipeline{
         }
       }
     }//end build app
-    stage('Code Analysis'){
+    /*stage('Code Analysis'){
       steps {
         sh "echo run sonarqube scan"
         sh "docker run --rm -v ${workspace}:/usr/src/mymaven -v ${workspace}/maven-conf:/usr/share/maven/ref/ -v m2maven:/root/.m2:rw -w /usr/src/mymaven maven:3.5-alpine mvn sonar:sonar"
       }
-    }
+    }*/
     stage('Build & Tag Image') {
       steps {
         script {
@@ -30,7 +30,7 @@ pipeline{
             dir('deploy') {                 
                   //sh "docker build --rm -t demo/webapp --build-arg name=${NAME} --build-arg version=${VERSION} ."
                   sh "docker build --rm -t demo/webapp --build-arg name=${pom.version} --build-arg version=${pom.version} ."
-                  sh "docker tag demo/webapp dtr.local/demo/webapp:${pom.version}"
+                  sh "docker tag demo/webapp faizalyusuf/webapp:${pom.version}"
        	    }
         }
       }
@@ -39,16 +39,18 @@ pipeline{
       steps {
         script {
           def pom = readMavenPom file: 'pom.xml'
-            parallel (
-              DTR: {
+            //parallel (
+              //DTR: {
                   dir('deploy') {
-                      //withDockerRegistry(url: 'https://dtr.local', credentialsId: 'dtr-credentials') {}
-                      sh "docker push dtr.local/demo/webapp:${pom.version}"
+                      withDockerRegistry(url: 'https://docker.io', credentialsId: 'dockercloud') {
+                      //sh "docker login -u $DOCKER_USER -p $DOCKER_PASS"
+                      sh "docker push faizalyusuf/webapp:${pom.version}"
+                      }
                   }
-              },
-              Artifactory: {  
-                script {
-                  sh "echo push binary to artifactory"
+              //},
+              //Artifactory: {  
+                //script {
+                  //sh "echo push binary to artifactory"
                   /*def server = Artifactory.server('artifactory')
                   def uploadSpec = """{
                       "files":[
@@ -62,13 +64,13 @@ pipeline{
                       def buildInfo = server.upload(uploadSpec)
                       server.publishBuildInfo(buildInfo)
                 */
-                }
-              }
-            )
+         //       }
+        //      }
+       //     )
           }//end script
         }//end steps
     }//end push
-    stage('Deploy App') {
+    /*stage('Deploy App') {
       steps {
         script {
           def pom = readMavenPom file: 'pom.xml' 
@@ -79,7 +81,7 @@ pipeline{
           }
         }
       }
-    }
+    }*/
   }//end stages  
   post {
     always {
