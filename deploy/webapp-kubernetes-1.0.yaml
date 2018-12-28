@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: webapp
 spec:
-  replicas: 3
+  replicas: 4
   selector:
     matchLabels:
       app: webapp
@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: 'faizalyusuf/webapp:1.0'
+        image: 'gcr.io/faizal-gke-cluster/webapp:1.0'
         imagePullPolicy: "Always"
         ports:
         - containerPort: 8090     
@@ -30,23 +30,24 @@ kind: Service
 metadata:
   name: webapp-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: webapp
   ports:
-    #- protocol: TCP
-    - port: 8090
-      nodePort: 31000
-#---
-#apiVersion: extensions/v1beta1
-#kind: Ingress
-#metadata:
-#  name: webapp-ingress
-#spec:
-#  rules:
-#  - host: 172.28.128.36
-#    http:
-#    path: /webapp
-#    backend:
-#      serviceName: webapp-service
-#      servicePort: 8090
+  - port: 8090
+    targetPort: 8090
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: webapp-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "webapp-static-ip" 
+spec:
+  # rules:
+  # - host: 172.28.128.36
+  #   http:
+  #   path: /webapp
+  backend:
+    serviceName: webapp-service
+    servicePort: 8090
