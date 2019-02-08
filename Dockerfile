@@ -6,7 +6,7 @@ EXPOSE 8090
 
 ENV APP_HOME /usr/src/app
 
-COPY ./*.jar $APP_HOME/app.jar
+COPY target/*.jar $APP_HOME/app.jar
 
 WORKDIR $APP_HOME
 
